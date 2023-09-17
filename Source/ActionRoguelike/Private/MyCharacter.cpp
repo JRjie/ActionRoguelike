@@ -22,6 +22,9 @@ AMyCharacter::AMyCharacter()
 
 	//** allow the pawn to control the camera rotation
 	CameraComp->bUsePawnControlRotation = true;
+	SpringArmComp->bUsePawnControlRotation = true;
+	//** decoupling the Camera Yaw & Figure Pawn Yaw
+	this->bUseControllerRotationYaw = false;
 }
 
 // Called when the game starts or when spawned
