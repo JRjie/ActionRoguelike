@@ -23,6 +23,10 @@ public:
 	AMyCharacter();
 
 protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> ProjectileClass;//** safe UClass
+
+protected:
 
 	UPROPERTY(VisibleAnywhere)//exposure all variable
 		USpringArmComponent* SpringArmComp;
@@ -30,18 +34,20 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keybord", meta = (AllowPrivateAccess = "true"))
+	//** Keyboard Input
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IM_DefaultMappingContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keybord", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_MoveForwardAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keybord", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_MoveTransverseAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keybord", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_MoveJumpAction;
 
+	//** Mouse Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Mouse", meta = (AllowPrivareAccess ="true"))
 	UInputMappingContext* IM_MouseMappingContext;
 
@@ -51,6 +57,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Mouse", meta = (AllowPrivareAccess ="true"))
 	UInputAction* IA_MoveMouseYAction;
 
+	//** Skill trigger
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Skill", meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* IM_SkillMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Skill", meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_Skill1Action;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -58,8 +71,11 @@ protected:
 	void MoveForward(const FInputActionValue& InputValue);
 	void MoveTransverse(const FInputActionValue& InputValue);
 	void MoveJump(const FInputActionValue& InputValue);
+
 	void MoveMouseX(const FInputActionValue& InputValue);
     void MoveMouseY(const FInputActionValue& InputValue);
+
+	void Skill1();
 
 public:	
 	// Called every frame

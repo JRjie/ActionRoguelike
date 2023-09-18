@@ -42,6 +42,7 @@ void AMyCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(IM_DefaultMappingContext, 0);
 			Subsystem->AddMappingContext(IM_MouseMappingContext, 0);
+			Subsystem->AddMappingContext(IM_SkillMappingContext, 0);
 		}
 	}
 }
@@ -113,6 +114,22 @@ void AMyCharacter::MoveMouseY(const FInputActionValue& InputValue)
 	}
 }
 
+void AMyCharacter::Skill1()
+{
+	if (Controller != nullptr)
+	{
+		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+
+		//** get the SpringArm Rotation:{pitch, yaw, roll}
+		FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
+
+		FActorSpawnParameters SpawnParams;
+		//** allow skill pawn to spawn when it is overlapping with other pawns
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	}
+}
 
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
@@ -131,8 +148,11 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(IA_MoveForwardAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveForward);
 		EnhancedInputComponent->BindAction(IA_MoveTransverseAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveTransverse);
 		EnhancedInputComponent->BindAction(IA_MoveJumpAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveJump);
+
 		EnhancedInputComponent->BindAction(IA_MoveMouseXAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveMouseX);
 		EnhancedInputComponent->BindAction(IA_MoveMouseYAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveMouseY);
+
+		EnhancedInputComponent->BindAction(IA_Skill1Action, ETriggerEvent::Triggered, this, &AMyCharacter::Skill1);
 	}
 }
 
