@@ -7,6 +7,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputSubsystemInterface.h"
+#include "GameFramework\CharacterMovementComponent.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -20,11 +21,13 @@ AMyCharacter::AMyCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
 
-	//** allow the pawn to control the camera rotation
+	//** allow the Camera & SpringArm to use Pawn Control Rotation
 	CameraComp->bUsePawnControlRotation = true;
 	SpringArmComp->bUsePawnControlRotation = true;
-	//** decoupling the Camera Yaw & Figure Pawn Yaw
+	//** decoupling Camera Yaw & Figure Pawn Yaw
 	this->bUseControllerRotationYaw = false;
+	//** allow figure to rotate
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 // Called when the game starts or when spawned
