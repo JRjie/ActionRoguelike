@@ -13,6 +13,8 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 
+class UMyInteractionComponent;
+
 UCLASS()
 class ACTIONROGUELIKE_API AMyCharacter : public ACharacter
 {
@@ -29,7 +31,7 @@ protected:
 protected:
 
 	UPROPERTY(VisibleAnywhere)//exposure all variable
-		USpringArmComponent* SpringArmComp;
+	USpringArmComponent* SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
@@ -57,12 +59,23 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Mouse", meta = (AllowPrivareAccess ="true"))
 	UInputAction* IA_MoveMouseYAction;
 
-	//** Skill trigger
+	//** Skill trigger Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Skill", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IM_SkillMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Skill", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Skill1Action;
+
+	//** Interaction Input
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Interaction", meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* IM_InteractionMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Interaction", meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_InteractAction;
+
+	//** 
+	UPROPERTY(VisibleAnywhere)
+	UMyInteractionComponent* InteractionComp;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -76,6 +89,8 @@ protected:
     void MoveMouseY(const FInputActionValue& InputValue);
 
 	void Skill1();
+
+	void PrimaryInteract();
 
 public:	
 	// Called every frame

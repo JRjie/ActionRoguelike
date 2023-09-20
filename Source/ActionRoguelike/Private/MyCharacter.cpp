@@ -8,6 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputSubsystemInterface.h"
 #include "GameFramework\CharacterMovementComponent.h"
+#include "MyInteractionComponent.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -20,6 +21,8 @@ AMyCharacter::AMyCharacter()
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
+
+	InteractionComp = CreateDefaultSubobject<UMyInteractionComponent>("InteractionComp");
 
 	//** allow the Camera & SpringArm to use Pawn Control Rotation
 	CameraComp->bUsePawnControlRotation = true;
@@ -43,6 +46,7 @@ void AMyCharacter::BeginPlay()
 			Subsystem->AddMappingContext(IM_DefaultMappingContext, 0);
 			Subsystem->AddMappingContext(IM_MouseMappingContext, 0);
 			Subsystem->AddMappingContext(IM_SkillMappingContext, 0);
+			Subsystem->AddMappingContext(IM_InteractionMappingContext, 0);
 		}
 	}
 }
@@ -131,6 +135,14 @@ void AMyCharacter::Skill1()
 	}
 }
 
+void AMyCharacter::PrimaryInteract()
+{
+	if (Controller != nullptr && InteractionComp != nullptr)
+	{
+		InteractionComp->PrimaryInteract();
+	}
+}
+
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
@@ -153,6 +165,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(IA_MoveMouseYAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveMouseY);
 
 		EnhancedInputComponent->BindAction(IA_Skill1Action, ETriggerEvent::Triggered, this, &AMyCharacter::Skill1);
+
+		EnhancedInputComponent->BindAction(IA_InteractAction, ETriggerEvent::Triggered, this, &AMyCharacter::PrimaryInteract);
 	}
 }
 
