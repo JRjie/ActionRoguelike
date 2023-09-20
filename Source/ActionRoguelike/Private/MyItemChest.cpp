@@ -2,6 +2,7 @@
 
 
 #include "MyItemChest.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 AMyItemChest::AMyItemChest()
@@ -15,12 +16,12 @@ AMyItemChest::AMyItemChest()
 	LidMash = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LidMesh"));
 	LidMash->SetupAttachment(BaseMash);
 
-	TargetPitch = 120;
+	TargetPitch = 120.0f;
 }
 
 void AMyItemChest::Interact_Implementation(APawn* InstigatorPawn)
 {
-	LidMash->SetRelativeRotation(FRotator(TargetPitch, 0, 0));
+	LidMash->SetRelativeRotation(FRotator(TargetPitch, 0.0f, 0.0f));
 }
 
 // Called when the game starts or when spawned

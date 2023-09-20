@@ -7,7 +7,7 @@
 #include "MyGameplayInterface.h"
 #include "MyItemChest.generated.h"
 
-class UStaticMeshComponent;
+class UStaticMeshComponent;//** Added Header file on .cpp
 
 UCLASS()
 class ACTIONROGUELIKE_API AMyItemChest : public AActor, public IMyGameplayInterface
