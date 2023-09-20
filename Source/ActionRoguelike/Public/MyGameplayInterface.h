@@ -23,6 +23,6 @@ class ACTIONROGUELIKE_API IMyGameplayInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	UFUNCTION(BlueprintNativeEvent)//**  allow c++ implementation and blueprint override
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)//**  allow c++ implementation and blueprint override
 	void Interact(APawn* InstigatorPawn);
 };
