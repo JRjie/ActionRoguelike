@@ -4,9 +4,11 @@
 #include "MyCharacter.h"
 #include "GameFramework\SpringArmComponent.h"
 #include "Camera\CameraComponent.h"
+
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputSubsystemInterface.h"
+
 #include "GameFramework\CharacterMovementComponent.h"
 #include "MyInteractionComponent.h"
 
@@ -118,21 +120,30 @@ void AMyCharacter::MoveMouseY(const FInputActionValue& InputValue)
 	}
 }
 
-void AMyCharacter::Skill1()
+void AMyCharacter::PrimaryAttack()
 {
 	if (Controller != nullptr)
 	{
-		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+		PlayAnimMontage(AttackAnim);
 
-		//** get the SpringArm Rotation:{pitch, yaw, roll}
-		FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
+		GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &AMyCharacter::PrimaryAttack_TimeElapsed, 0.2f, false);
 
-		FActorSpawnParameters SpawnParams;
-		//** allow skill pawn to spawn when it is overlapping with other pawns
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+		//GetWorldTimerManager().ClearTimer(TimerHandle_PrimaryAttack);
 	}
+}
+
+void AMyCharacter::PrimaryAttack_TimeElapsed()
+{
+	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+
+	//** get the SpringArm Rotation:{pitch, yaw, roll}
+	FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
+
+	FActorSpawnParameters SpawnParams;
+	//** allow skill pawn to spawn when it is overlapping with other pawns
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
 
 void AMyCharacter::PrimaryInteract()
@@ -164,7 +175,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(IA_MoveMouseXAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveMouseX);
 		EnhancedInputComponent->BindAction(IA_MoveMouseYAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveMouseY);
 
-		EnhancedInputComponent->BindAction(IA_Skill1Action, ETriggerEvent::Triggered, this, &AMyCharacter::Skill1);
+		EnhancedInputComponent->BindAction(IA_Skill1Action, ETriggerEvent::Triggered, this, &AMyCharacter::PrimaryAttack);
 
 		EnhancedInputComponent->BindAction(IA_InteractAction, ETriggerEvent::Triggered, this, &AMyCharacter::PrimaryInteract);
 	}

@@ -15,6 +15,9 @@ class UInputAction;
 
 class UMyInteractionComponent;
 
+class UAnimMontage;
+class UTimerHandle;
+
 UCLASS()
 class ACTIONROGUELIKE_API AMyCharacter : public ACharacter
 {
@@ -37,40 +40,45 @@ protected:
 	UCameraComponent* CameraComp;
 
 	//** Keyboard Input
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Move", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IM_DefaultMappingContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Move", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_MoveForwardAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Move", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_MoveTransverseAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Move", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_MoveJumpAction;
 
 	//** Mouse Input
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Mouse", meta = (AllowPrivareAccess ="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|View", meta = (AllowPrivareAccess ="true"))
 	UInputMappingContext* IM_MouseMappingContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Mouse", meta = (AllowPrivareAccess ="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|View", meta = (AllowPrivareAccess ="true"))
 	UInputAction* IA_MoveMouseXAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Mouse", meta = (AllowPrivareAccess ="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|View", meta = (AllowPrivareAccess ="true"))
 	UInputAction* IA_MoveMouseYAction;
 
 	//** Skill trigger Input
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Skill", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|Skill", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IM_SkillMappingContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Skill", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|Skill", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Skill1Action;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Anim|Attack", meta = (AllowPrivateAccess = "ture"))
+	UAnimMontage* AttackAnim;
+
+	FTimerHandle TimerHandle_PrimaryAttack;
+
 	//** Interaction Input
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Interaction", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Interaction", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IM_InteractionMappingContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerAction|Input|Keyboard|Interaction", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Interaction", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_InteractAction;
 
 	//** 
@@ -88,7 +96,8 @@ protected:
 	void MoveMouseX(const FInputActionValue& InputValue);
     void MoveMouseY(const FInputActionValue& InputValue);
 
-	void Skill1();
+	void PrimaryAttack();
+	void PrimaryAttack_TimeElapsed();
 
 	void PrimaryInteract();
 
