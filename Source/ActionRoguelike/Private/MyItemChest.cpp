@@ -16,19 +16,50 @@ AMyItemChest::AMyItemChest()
 	LidMash = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LidMesh"));
 	LidMash->SetupAttachment(BaseMash);
 
-	TargetPitch = 120.0f;
+	GoldensMash = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GoldensMesh"));
+	GoldensMash->SetupAttachment(BaseMash);
+
+	AnimateLidComp = CreateDefaultSubobject<UTimelineComponent>("AnimateLidComp");
+}
+
+void AMyItemChest::UpdateLidPitch(float Pitch)
+{
+	LidMash->SetRelativeRotation(FRotator(Pitch, 0.0f, 0.0f));
 }
 
 void AMyItemChest::Interact_Implementation(APawn* InstigatorPawn)
 {
-	LidMash->SetRelativeRotation(FRotator(TargetPitch, 0.0f, 0.0f));
+	if (AnimateLidComp->IsPlaying() == true)
+	{
+		return;
+	}
+	else{
+		FRotator LidRotator = LidMash->GetRelativeRotation();
+		float LidPitch = LidRotator.Pitch;
+
+		if (LidPitch == 0.0f && LidOpenCurve)
+		{
+			AnimateLidFunc.BindDynamic(this, &AMyItemChest::UpdateLidPitch);
+			AnimateLidComp->AddInterpFloat(LidOpenCurve, AnimateLidFunc, FName("LidPitch"));
+			AnimateLidComp->SetNewTime(0.0);
+			AnimateLidComp->Play();
+		}
+
+		else if (LidPitch == 60.0f && LidCloseCurve)
+		{
+			AnimateLidFunc.BindDynamic(this, &AMyItemChest::UpdateLidPitch);
+			AnimateLidComp->AddInterpFloat(LidCloseCurve, AnimateLidFunc, FName("LidPitch"));
+			AnimateLidComp->SetNewTime(0.0);
+			AnimateLidComp->Play();
+		}
+	}
 }
 
 // Called when the game starts or when spawned
 void AMyItemChest::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
