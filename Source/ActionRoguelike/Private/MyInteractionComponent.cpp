@@ -48,7 +48,7 @@ void UMyInteractionComponent::PrimaryInteract()
 	Owner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
 	Start = EyeLocation;
-	End = EyeLocation + (EyeRotation.Vector() * 1000.0f);
+	End = EyeLocation + (EyeRotation.Vector() * 500.0f);
 
 	//FHitResult Hit;
 	//bool bBlockingHit = GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, ObjectQueryParams);
@@ -56,7 +56,7 @@ void UMyInteractionComponent::PrimaryInteract()
 	TArray<FHitResult> Hits;
 
 	FCollisionShape Shape;
-	float Radius = 30.0f;
+	float Radius = 70.0f;
 	Shape.SetSphere(Radius);
 
 	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, Start, End, FQuat::Identity, ObjectQueryParams, Shape);
