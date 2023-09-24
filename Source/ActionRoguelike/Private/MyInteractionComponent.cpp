@@ -62,7 +62,7 @@ void UMyInteractionComponent::PrimaryInteract()
 	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, Start, End, FQuat::Identity, ObjectQueryParams, Shape);
 
 	//** Debug
-	FColor LineColor = bBlockingHit ? FColor::Green : FColor::Red;
+	//FColor LineColor = bBlockingHit ? FColor::Green : FColor::Red;
 
 	for (FHitResult Hit : Hits)
 	{
@@ -76,7 +76,7 @@ void UMyInteractionComponent::PrimaryInteract()
 				IMyGameplayInterface::Execute_Interact(HitActor, Pawn);
 
 				//** Debug
-				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 8, LineColor, false, 2.0f, 0, 2.0f);
+				//DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 8, LineColor, false, 2.0f, 0, 2.0f);
 
 				break;
 			}
@@ -84,6 +84,6 @@ void UMyInteractionComponent::PrimaryInteract()
 	}
 
 	//** Debug
-	DrawDebugLine(GetWorld(), Start, End, LineColor, false, 2.0f, 0, 2.0f);
+	//DrawDebugLine(GetWorld(), Start, End, LineColor, false, 2.0f, 0, 2.0f);
 }
 
