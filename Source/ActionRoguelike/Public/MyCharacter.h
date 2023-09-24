@@ -91,7 +91,7 @@ protected:
 	//MoveFunction
 	void MoveForward(const FInputActionValue& InputValue);
 	void MoveTransverse(const FInputActionValue& InputValue);
-	void MoveJump(const FInputActionValue& InputValue);
+	//void MoveJump(const FInputActionValue& InputValue);
 
 	void MoveMouseX(const FInputActionValue& InputValue);
     void MoveMouseY(const FInputActionValue& InputValue);

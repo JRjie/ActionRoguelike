@@ -93,14 +93,14 @@ void AMyCharacter::MoveTransverse(const FInputActionValue& InputValue)
 
 }
 
-void AMyCharacter::MoveJump(const FInputActionValue& InputValue)
-{
-	float value = InputValue.GetMagnitude();
-	if (Controller != nullptr)
-	{
-		//TODO
-	}
-}
+//void AMyCharacter::MoveJump(const FInputActionValue& InputValue)
+//{
+//	float value = InputValue.GetMagnitude();
+//	if (Controller != nullptr)
+//	{
+//		//TODO
+//	}
+//}
 
 void AMyCharacter::MoveMouseX(const FInputActionValue& InputValue)
 {
@@ -170,7 +170,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		//** Bind the action
 		EnhancedInputComponent->BindAction(IA_MoveForwardAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveForward);
 		EnhancedInputComponent->BindAction(IA_MoveTransverseAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveTransverse);
-		EnhancedInputComponent->BindAction(IA_MoveJumpAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveJump);
+		EnhancedInputComponent->BindAction(IA_MoveJumpAction, ETriggerEvent::Triggered, this, &AMyCharacter::Jump);
 
 		EnhancedInputComponent->BindAction(IA_MoveMouseXAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveMouseX);
 		EnhancedInputComponent->BindAction(IA_MoveMouseYAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveMouseY);
