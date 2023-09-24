@@ -39,7 +39,6 @@ void AMyItemChest::Interact_Implementation(APawn* InstigatorPawn)
 
 		if (LidPitch == 0.0f && LidOpenCurve)
 		{
-			AnimateLidFunc.BindDynamic(this, &AMyItemChest::UpdateLidPitch);
 			AnimateLidComp->AddInterpFloat(LidOpenCurve, AnimateLidFunc, FName("LidPitch"));
 			AnimateLidComp->SetNewTime(0.0);
 			AnimateLidComp->Play();
@@ -47,7 +46,6 @@ void AMyItemChest::Interact_Implementation(APawn* InstigatorPawn)
 
 		else if (LidPitch == 60.0f && LidCloseCurve)
 		{
-			AnimateLidFunc.BindDynamic(this, &AMyItemChest::UpdateLidPitch);
 			AnimateLidComp->AddInterpFloat(LidCloseCurve, AnimateLidFunc, FName("LidPitch"));
 			AnimateLidComp->SetNewTime(0.0);
 			AnimateLidComp->Play();
@@ -60,6 +58,7 @@ void AMyItemChest::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AnimateLidFunc.BindDynamic(this, &AMyItemChest::UpdateLidPitch);
 }
 
 // Called every frame
