@@ -4,6 +4,8 @@
 #include "MyExplosiveBarrel.h"
 #include "Components/StaticMeshComponent.h"
 #include "PhysicsEngine/RadialForceComponent.h"
+#include "DrawDebugHelpers.h"
+#include "MyMagicProjectile.h"
 
 // Sets default values
 AMyExplosiveBarrel::AMyExplosiveBarrel()
@@ -37,7 +39,18 @@ void AMyExplosiveBarrel::BeginPlay()
 
 void AMyExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	ForceComp->FireImpulse();
+	if (Cast<AMyMagicProjectile>(OtherActor))
+	{
+		ForceComp->FireImpulse();
+	}
+	else {
+		return;
+	}
+	//** Debug
+	//UE_LOG(LogTemp, Log, TEXT("OnActorHit in Explosive Barrel"));
+	//UE_LOG(LogTemp, Warning, TEXT("OtherActor : %s, at game time: %f"), *GetNameSafe(OtherActor), GetWorld()->TimeSeconds);
+	//FString ComebinedString = FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString());
+	//DrawDebugString(GetWorld(), Hit.ImpactPoint, ComebinedString, nullptr, FColor::Green, 2.0f, true);
 }
 
 // Called every frame

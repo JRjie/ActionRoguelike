@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MyCharacter.h"
 #include "MyExplosiveBarrel.generated.h"
 
 class UStaticMeshComponent;
