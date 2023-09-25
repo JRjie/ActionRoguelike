@@ -25,7 +25,17 @@ AMyMagicProjectile::AMyMagicProjectile()
 void AMyMagicProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	AActor* MyCharacter = this->GetInstigator();
+
+	SphereComp->IgnoreActorWhenMoving(MyCharacter, true);
+
+	SphereComp->OnComponentHit.AddDynamic(this, &AMyMagicProjectile::HitSomething);
+}
+
+void AMyMagicProjectile::HitSomething(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	this->Destroy();
 }
 
 // Called every frame

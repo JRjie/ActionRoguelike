@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MyCharacter.h"
 #include "MyMagicProjectile.generated.h"
 
 class USphereComponent;
@@ -27,6 +28,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	UParticleSystemComponent* EffectComp;
+
+	UFUNCTION()//** in order to bind the event
+	void HitSomething(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	virtual void BeginPlay() override;
 

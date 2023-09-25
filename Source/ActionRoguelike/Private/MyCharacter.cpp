@@ -143,6 +143,8 @@ void AMyCharacter::PrimaryAttack_TimeElapsed()
 	//** allow skill pawn to spawn when it is overlapping with other pawns
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
+	SpawnParams.Instigator = this;
+
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
 
