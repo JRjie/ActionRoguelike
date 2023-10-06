@@ -61,7 +61,7 @@ void UMyInteractionComponent::PrimaryInteract()
 
 	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, Start, End, FQuat::Identity, ObjectQueryParams, Shape);
 
-	//** Debug
+	//** Debug 
 	//FColor LineColor = bBlockingHit ? FColor::Green : FColor::Red;
 
 	for (FHitResult Hit : Hits)
