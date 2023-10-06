@@ -16,13 +16,15 @@ AMyExplosiveBarrel::AMyExplosiveBarrel()
 	MeshComp=CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	RootComponent = MeshComp;
 
+	MeshComp->SetSimulatePhysics(true);
+
 	ForceComp = CreateDefaultSubobject<URadialForceComponent>("ForceComp");
 	ForceComp->SetupAttachment(MeshComp);
 
 	ForceComp->SetAutoActivate(false);
 
 	ForceComp->Radius = 750.0f;
-	ForceComp->ImpulseStrength = 500.0f;//** 200000.0f if bImuplseVelChange = true
+	ForceComp->ImpulseStrength = 500.0f;//** 200000.0f if bImuplseVelChange != true
 
 	ForceComp->bImpulseVelChange = true;
 
