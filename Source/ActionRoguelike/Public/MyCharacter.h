@@ -29,7 +29,10 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> ProjectileClass;//** safe UClass
+	TSubclassOf<AActor> MagicProjectileClass;//** safe UClass
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> DashProjectileClass;//** safe UClass
 
 protected:
 
@@ -67,7 +70,10 @@ protected:
 	UInputMappingContext* IM_SkillMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|Skill", meta = (AllowPrivateAccess = "true"))
-	UInputAction* IA_Skill1Action;
+	UInputAction* IA_Skill1Action;//** MagicProjectile
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|Skill", meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_Skill2Action;//** DashProjectile
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Anim|Attack", meta = (AllowPrivateAccess = "ture"))
 	UAnimMontage* AttackAnim;
@@ -96,8 +102,11 @@ protected:
 	void MoveMouseX(const FInputActionValue& InputValue);
     void MoveMouseY(const FInputActionValue& InputValue);
 
+	void SpawnProjectile(TSubclassOf<AActor> ProjectileClass);
 	void PrimaryAttack();
 	void PrimaryAttack_TimeElapsed();
+	void Dash();
+	void Dash_TimeElapsed();
 
 	void PrimaryInteract();
 

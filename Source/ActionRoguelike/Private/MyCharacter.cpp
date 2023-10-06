@@ -12,6 +12,8 @@
 #include "GameFramework\CharacterMovementComponent.h"
 #include "MyInteractionComponent.h"
 
+#include "Math/RotationTranslationMatrix.h"
+
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
@@ -35,6 +37,7 @@ AMyCharacter::AMyCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
+
 // Called when the game starts or when spawned
 void AMyCharacter::BeginPlay()
 {
@@ -53,6 +56,7 @@ void AMyCharacter::BeginPlay()
 	}
 }
 
+
 //** MoveFunction
 void AMyCharacter::MoveForward(const FInputActionValue &InputValue)
 {
@@ -61,8 +65,7 @@ void AMyCharacter::MoveForward(const FInputActionValue &InputValue)
 	if (Controller != nullptr && value != 0.0f)
 	{
 		//** get the SpringArm Rotation:{x, y, z}
-		//const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator Rotation = GetViewRotation();
+		const FRotator Rotation = Controller->GetControlRotation();
 		//** set the flat coordinate:{x, y}
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
@@ -80,8 +83,7 @@ void AMyCharacter::MoveTransverse(const FInputActionValue& InputValue)
 	if (Controller != nullptr && value != 0.0f)
 	{
 		//** get the SpringArm Rotation:{pitch, yaw, roll}
-		//const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator Rotation = GetViewRotation();
+		const FRotator Rotation = Controller->GetControlRotation();
 		//** set the flat coordinate:{x, y}
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
@@ -93,6 +95,7 @@ void AMyCharacter::MoveTransverse(const FInputActionValue& InputValue)
 
 }
 
+
 //void AMyCharacter::MoveJump(const FInputActionValue& InputValue)
 //{
 //	float value = InputValue.GetMagnitude();
@@ -101,6 +104,7 @@ void AMyCharacter::MoveTransverse(const FInputActionValue& InputValue)
 //		//TODO
 //	}
 //}
+
 
 void AMyCharacter::MoveMouseX(const FInputActionValue& InputValue)
 {
@@ -120,33 +124,74 @@ void AMyCharacter::MoveMouseY(const FInputActionValue& InputValue)
 	}
 }
 
+
 void AMyCharacter::PrimaryAttack()
 {
-	if (Controller != nullptr)
-	{
 		PlayAnimMontage(AttackAnim);
 
-		GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &AMyCharacter::PrimaryAttack_TimeElapsed, 0.2f, false);
-
-		//GetWorldTimerManager().ClearTimer(TimerHandle_PrimaryAttack);
-	}
+		GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &AMyCharacter::PrimaryAttack_TimeElapsed, 0.2f);
 }
 
 void AMyCharacter::PrimaryAttack_TimeElapsed()
 {
-	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-
-	//** get the SpringArm Rotation:{pitch, yaw, roll}
-	FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
-
-	FActorSpawnParameters SpawnParams;
-	//** allow skill pawn to spawn when it is overlapping with other pawns
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-	SpawnParams.Instigator = this;
-
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	SpawnProjectile(MagicProjectileClass);
 }
+
+
+void AMyCharacter::Dash()
+{
+		PlayAnimMontage(AttackAnim);
+
+		GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &AMyCharacter::Dash_TimeElapsed, 0.2f);
+}
+
+void AMyCharacter::Dash_TimeElapsed()
+{
+	SpawnProjectile(DashProjectileClass);
+}
+
+
+void AMyCharacter::SpawnProjectile(TSubclassOf<AActor> ProjectileClass)
+{
+	if (ensure(ProjectileClass))
+	{
+		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+
+		FActorSpawnParameters SpawnParams;
+		//** allow skill pawn to spawn when it is overlapping with other pawns
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = this;
+
+		FCollisionShape Shape;
+		Shape.SetSphere(20.0f);
+
+		FCollisionQueryParams Params;
+		Params.AddIgnoredActor(this);
+
+		FCollisionObjectQueryParams ObjParams;
+		ObjParams.AddObjectTypesToQuery(ECC_Pawn);
+		ObjParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+		ObjParams.AddObjectTypesToQuery(ECC_WorldStatic);
+
+		FVector Start = CameraComp->GetComponentLocation();
+
+		FVector End = Start + (GetControlRotation().Vector() * 50000.0f);
+
+		FHitResult Hit;
+
+		if (GetWorld()->SweepSingleByObjectType(Hit, Start, End, FQuat::Identity, ObjParams, Shape, Params))
+		{
+			End = Hit.ImpactPoint;
+		}
+
+		FRotator ProjectileRotation = FRotationMatrix::MakeFromX(End - HandLocation).Rotator();
+
+		//** get the SpringArm Rotation:{pitch, yaw, roll}
+		FTransform SpawnTM = FTransform(ProjectileRotation, HandLocation);
+		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	}
+}
+
 
 void AMyCharacter::PrimaryInteract()
 {
@@ -156,12 +201,14 @@ void AMyCharacter::PrimaryInteract()
 	}
 }
 
+
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
+
 
 // Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -178,6 +225,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(IA_MoveMouseYAction, ETriggerEvent::Triggered, this, &AMyCharacter::MoveMouseY);
 
 		EnhancedInputComponent->BindAction(IA_Skill1Action, ETriggerEvent::Triggered, this, &AMyCharacter::PrimaryAttack);
+		EnhancedInputComponent->BindAction(IA_Skill2Action, ETriggerEvent::Triggered, this, &AMyCharacter::Dash);
 
 		EnhancedInputComponent->BindAction(IA_InteractAction, ETriggerEvent::Triggered, this, &AMyCharacter::PrimaryInteract);
 	}
