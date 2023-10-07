@@ -16,7 +16,8 @@ class UInputAction;
 class UMyInteractionComponent;
 
 class UAnimMontage;
-class UTimerHandle;
+
+class UMyAttributeComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API AMyCharacter : public ACharacter
@@ -28,19 +29,26 @@ public:
 	AMyCharacter();
 
 protected:
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> MagicProjectileClass;//** safe UClass
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> DashProjectileClass;//** safe UClass
 
-protected:
-
 	UPROPERTY(VisibleAnywhere)//exposure all variable
 	USpringArmComponent* SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
+
+	UPROPERTY(VisibleAnywhere)
+	UMyInteractionComponent* InteractionComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UMyAttributeComponent* AttributeComp;
+
+protected:
 
 	//** Keyboard Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Move", meta = (AllowPrivateAccess = "true"))
@@ -55,6 +63,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Move", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_MoveJumpAction;
 
+
 	//** Mouse Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|View", meta = (AllowPrivareAccess ="true"))
 	UInputMappingContext* IM_MouseMappingContext;
@@ -64,6 +73,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|View", meta = (AllowPrivareAccess ="true"))
 	UInputAction* IA_MoveMouseYAction;
+
 
 	//** Skill trigger Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Mouse|Skill", meta = (AllowPrivateAccess = "true"))
@@ -80,6 +90,7 @@ protected:
 
 	FTimerHandle TimerHandle_PrimaryAttack;
 
+
 	//** Interaction Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Interaction", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IM_InteractionMappingContext;
@@ -87,14 +98,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Keyboard|Interaction", meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_InteractAction;
 
-	//** 
-	UPROPERTY(VisibleAnywhere)
-	UMyInteractionComponent* InteractionComp;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//MoveFunction
+	//** MoveFunction
 	void MoveForward(const FInputActionValue& InputValue);
 	void MoveTransverse(const FInputActionValue& InputValue);
 	//void MoveJump(const FInputActionValue& InputValue);
@@ -114,6 +122,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+	//** Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

@@ -12,7 +12,7 @@
 #include "GameFramework\CharacterMovementComponent.h"
 #include "MyInteractionComponent.h"
 
-#include "Math/RotationTranslationMatrix.h"
+#include "MyAttributeComponent.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -27,6 +27,9 @@ AMyCharacter::AMyCharacter()
 	CameraComp->SetupAttachment(SpringArmComp);
 
 	InteractionComp = CreateDefaultSubobject<UMyInteractionComponent>("InteractionComp");
+
+	AttributeComp = CreateDefaultSubobject<UMyAttributeComponent>("AttributeComp");
+
 
 	//** allow the Camera & SpringArm to use Pawn Control Rotation
 	CameraComp->bUsePawnControlRotation = true;
@@ -210,7 +213,7 @@ void AMyCharacter::Tick(float DeltaTime)
 }
 
 
-// Called to bind functionality to input
+//** Called to bind functionality to input
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
