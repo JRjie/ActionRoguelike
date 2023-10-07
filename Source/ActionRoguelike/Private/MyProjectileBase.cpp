@@ -35,7 +35,7 @@ void AMyProjectileBase::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Ot
 
 void AMyProjectileBase::Explode_Implementation()
 {
-	if (ensure(!IsPendingKill()))
+	if (ensure(IsValid(this)))
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
 		
