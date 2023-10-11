@@ -58,10 +58,3 @@ void AMyDashProjectile::TeleportInstigator()
 
 	Destroy();
 }
-
-// Called every frame
-//void AMyMagicProjectile::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//
-//}
