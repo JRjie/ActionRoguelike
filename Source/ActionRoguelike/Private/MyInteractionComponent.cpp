@@ -56,7 +56,7 @@ void UMyInteractionComponent::PrimaryInteract()
 	TArray<FHitResult> Hits;
 
 	FCollisionShape Shape;
-	float Radius = 70.0f;
+	float Radius = 90.0f;
 	Shape.SetSphere(Radius);
 
 	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, Start, End, FQuat::Identity, ObjectQueryParams, Shape);

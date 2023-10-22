@@ -6,6 +6,7 @@
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "DrawDebugHelpers.h"
 #include "MyMagicProjectile.h"
+#include "MyAttributeComponent.h"
 
 // Sets default values
 AMyExplosiveBarrel::AMyExplosiveBarrel()
@@ -44,6 +45,13 @@ void AMyExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent, AActor* O
 	if (Cast<AMyMagicProjectile>(OtherActor))
 	{
 		ForceComp->FireImpulse();
+	}
+	else if (Cast<AMyCharacter>(OtherActor))
+	{
+		ForceComp->FireImpulse();
+
+		UMyAttributeComponent* AttributeComp = Cast<UMyAttributeComponent>(OtherActor->GetComponentByClass(UMyAttributeComponent::StaticClass()));
+		AttributeComp->ApplyHealthChange(-20.0f);
 	}
 	else {
 		return;
