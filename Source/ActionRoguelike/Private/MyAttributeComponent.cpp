@@ -7,6 +7,13 @@ UMyAttributeComponent::UMyAttributeComponent()
 	Health = 100.0f;
 }
 
+
+bool UMyAttributeComponent::IsAlive() const
+{
+	return Health > 0.0f;
+}
+
+
 bool UMyAttributeComponent::ApplyHealthChange(float Delta)
 {
 	Health += Delta;

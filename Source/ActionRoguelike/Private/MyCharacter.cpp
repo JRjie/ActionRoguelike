@@ -41,6 +41,14 @@ AMyCharacter::AMyCharacter()
 }
 
 
+void AMyCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	AttributeComp->OnHealthChanged.AddDynamic(this, &AMyCharacter::OnHealthChanged);
+}
+
+
 // Called when the game starts or when spawned
 void AMyCharacter::BeginPlay()
 {
@@ -201,6 +209,19 @@ void AMyCharacter::PrimaryInteract()
 	if (Controller != nullptr && InteractionComp != nullptr)
 	{
 		InteractionComp->PrimaryInteract();
+	}
+}
+
+
+void AMyCharacter::OnHealthChanged(AActor* InstigatorActor, UMyAttributeComponent* OwningComp, float NewHealth, float Delta)
+{
+	if (NewHealth <= 0.0f && Delta <= 0.0f)
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		if (PC != nullptr)
+		{
+			PC->DisableInput(PC);
+		}
 	}
 }
 
